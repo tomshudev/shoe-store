@@ -10,6 +10,7 @@ const URLsSelector: FC = () => {
   const { mutate, isLoading, data } = useMutation({
     mutationFn: scrapeURLs,
     onSettled: () => {
+      // By invalidating the queries we are making ReactQuery to refetch the query for the products
       queryClient.invalidateQueries();
     },
     mutationKey: ["/scrape/urls"],

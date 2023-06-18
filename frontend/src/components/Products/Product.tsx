@@ -1,12 +1,12 @@
 import { FC } from "react";
 import { Product as ProductType } from "../../api/types";
 
+// Returns a renderable price for the component, price can be null
+// or an array of two numbers, this Component handles all three scenarios
 const Price: FC<{ price: number[] | null }> = ({ price }) => {
   if (!price) {
     return <span className="font-bold">N/A</span>;
   }
-
-  console.log(price[0]);
 
   return (
     <div>

@@ -19,6 +19,8 @@ const Products: FC = () => {
     queryFn: async () => await fetchProducts(debouncedSearchValue),
   });
 
+  // Calculating the amount of pages we have according to the configurable page size
+  // and the amount of products we have
   const pagesCount = useMemo(
     () => Math.ceil(products?.length / PAGE_SIZE) || 1,
     [products]
@@ -39,6 +41,10 @@ const Products: FC = () => {
         <div>No products found...</div>
       ) : (
         <div className="flex flex-col gap-y-4">
+          {/* 
+                We slice the products to the products that should be visible according
+                to the current page
+            */}
           {products
             .slice(currPage * PAGE_SIZE, currPage * PAGE_SIZE + PAGE_SIZE)
             .map((p, index) => (

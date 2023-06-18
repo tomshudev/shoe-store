@@ -2,6 +2,8 @@ import { SERVER_URL } from "./constants";
 import { Product } from "./types";
 import axios from "axios";
 
+// This function fetches the products using axios, it passes a query
+// if the user types something, it retruns an array of products
 export const fetchProducts = async (
   searchValue: string | undefined
 ): Promise<Product[]> => {
@@ -11,11 +13,7 @@ export const fetchProducts = async (
         query: searchValue,
       },
     })
-    .then((data) => {
-      console.log(data.data);
-      return data.data.products as Product[];
-    });
-  // .catch(() => ({ status: "failure" }));
+    .then((data) => data.data.products as Product[]);
 
   return result;
 };
