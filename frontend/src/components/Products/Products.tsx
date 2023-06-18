@@ -1,10 +1,14 @@
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProducts } from "../../api/fetchProducts";
 import { useDebounce } from "use-debounce";
 import Product from "./Product";
+import PagesNavigator from "./PagesNavigator";
+
+const PAGE_SIZE = 10;
 
 const Products: FC = () => {
+  const [currPage, setCurrPage] = useState(0);
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue] = useDebounce(searchValue, 300);
   const {
@@ -14,6 +18,11 @@ const Products: FC = () => {
   } = useQuery(["/products", debouncedSearchValue], {
     queryFn: async () => await fetchProducts(debouncedSearchValue),
   });
+
+  const pagesCount = useMemo(
+    () => Math.ceil(products?.length / PAGE_SIZE) || 1,
+    [products]
+  );
 
   return (
     <div className="flex flex-col gap-y-2 p-2">
@@ -30,9 +39,16 @@ const Products: FC = () => {
         <div>No products found...</div>
       ) : (
         <div className="flex flex-col gap-y-4">
-          {products.map((p, index) => (
-            <Product product={p} key={index} />
-          ))}
+          {products
+            .slice(currPage * PAGE_SIZE, currPage * PAGE_SIZE + PAGE_SIZE)
+            .map((p, index) => (
+              <Product product={p} key={index} />
+            ))}
+          <PagesNavigator
+            pagesCount={pagesCount}
+            currPage={currPage}
+            setCurrPage={setCurrPage}
+          />
         </div>
       )}
     </div>
