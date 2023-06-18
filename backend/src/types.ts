@@ -7,6 +7,8 @@ export type MappedURLs = {
   domain: string;
 }[];
 
+export type ProductsMap = { [name: string]: Product };
+
 export type Product = {
   name: string;
   price: number[] | null;
